@@ -8,6 +8,23 @@ test('all media tracks are stopped during cleanup', () => {
   assert.deepEqual(calls, ['video', 'audio'])
 })
 
+test('cleanup continues when one track fails to stop', () => {
+  const calls = []
+  const stream = {
+    getTracks: () => [
+      { stop: () => { throw new Error('track already closed') } },
+      { stop: () => calls.push('audio') },
+    ],
+  }
+
+  assert.doesNotThrow(() => stopMediaStream(stream))
+  assert.deepEqual(calls, ['audio'])
+})
+
+test('cleanup tolerates tracks without a stop method', () => {
+  assert.doesNotThrow(() => stopMediaStream({ getTracks: () => [{}] }))
+})
+
 test('cleanup safely ignores a missing stream', () => {
   assert.doesNotThrow(() => stopMediaStream(null))
 })

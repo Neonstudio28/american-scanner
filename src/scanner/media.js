@@ -1,6 +1,12 @@
 export function stopMediaStream(stream) {
   if (!stream?.getTracks) return
-  stream.getTracks().forEach(track => track.stop())
+  stream.getTracks().forEach(track => {
+    try {
+      track.stop?.()
+    } catch {
+      // A broken track should not prevent the remaining tracks from stopping.
+    }
+  })
 }
 
 export function stopAudio(audio) {
