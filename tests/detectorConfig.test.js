@@ -8,6 +8,9 @@ test('detector options preserve the intended lightweight model settings', () => 
 
 test('invalid detector results are rejected before projection', () => {
   assert.equal(isUsableDetector(null), false)
-  assert.equal(isUsableDetector({ box: { x: Number.NaN, y: 2 } }), false)
-  assert.equal(isUsableDetector({ box: { x: 2, y: 3 } }), true)
+  assert.equal(isUsableDetector({ box: { x: Number.NaN, y: 2, width: 10, height: 10 } }), false)
+  assert.equal(isUsableDetector({ box: { x: 2, y: 3, width: Number.POSITIVE_INFINITY, height: 10 } }), false)
+  assert.equal(isUsableDetector({ box: { x: 2, y: 3, width: 0, height: 10 } }), false)
+  assert.equal(isUsableDetector({ box: { x: 2, y: 3, width: 10, height: -1 } }), false)
+  assert.equal(isUsableDetector({ box: { x: 2, y: 3, width: 10, height: 12 } }), true)
 })
