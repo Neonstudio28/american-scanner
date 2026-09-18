@@ -18,4 +18,6 @@ test('elapsed percentage is clamped at completion', () => {
 test('elapsed percentage rejects invalid durations', () => {
   assert.equal(percentElapsed(0, 500, 0), 0)
   assert.equal(percentElapsed(0, 500, -1), 0)
+  assert.equal(percentElapsed(0, 500, Number.NaN), 0)
+  assert.equal(percentElapsed(0, 500, Number.POSITIVE_INFINITY), 0)
 })
