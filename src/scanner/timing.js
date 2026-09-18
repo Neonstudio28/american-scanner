@@ -4,6 +4,6 @@ export function elapsedMs(startTime, now = Date.now()) {
 }
 
 export function percentElapsed(startTime, now, durationMs) {
-  if (durationMs <= 0) return 0
+  if (!Number.isFinite(durationMs) || durationMs <= 0) return 0
   return Math.min(100, (elapsedMs(startTime, now) / durationMs) * 100)
 }
