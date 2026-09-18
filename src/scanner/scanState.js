@@ -13,7 +13,8 @@ const transitions = {
 }
 
 export function canTransition(from, to) {
-  return from === to || Boolean(transitions[from]?.has(to))
+  if (!transitions[from] || !transitions[to]) return false
+  return from === to || transitions[from].has(to)
 }
 
 export function transition(from, to) {
