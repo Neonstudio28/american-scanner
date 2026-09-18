@@ -23,6 +23,13 @@ test('cleanup continues when one track fails to stop', () => {
 
 test('cleanup tolerates tracks without a stop method', () => {
   assert.doesNotThrow(() => stopMediaStream({ getTracks: () => [{}] }))
+  assert.doesNotThrow(() => stopMediaStream({ getTracks: () => [null] }))
+})
+
+test('cleanup tolerates malformed stream implementations', () => {
+  assert.doesNotThrow(() => stopMediaStream({ getTracks: () => { throw new Error('detached') } }))
+  assert.doesNotThrow(() => stopMediaStream({ getTracks: () => null }))
+  assert.doesNotThrow(() => stopMediaStream({ getTracks: () => ({}) }))
 })
 
 test('cleanup safely ignores a missing stream', () => {
