@@ -9,4 +9,11 @@ test('16:9 input maps coordinates without crop offsets', () => {
 
 test('invalid source dimensions return no projection', () => {
   assert.equal(projectMirroredBox({ xMin: 0, yMin: 0, width: 1, height: 1 }, 0, 720), null)
+  assert.equal(projectMirroredBox({ xMin: 0, yMin: 0, width: 1, height: 1 }, Number.NaN, 720), null)
+})
+
+test('invalid target dimensions return no projection', () => {
+  const box = { xMin: 0, yMin: 0, width: 1, height: 1 }
+  assert.equal(projectMirroredBox(box, 1280, 720, 0, 720), null)
+  assert.equal(projectMirroredBox(box, 1280, 720, 1280, Number.POSITIVE_INFINITY), null)
 })
