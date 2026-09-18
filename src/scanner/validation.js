@@ -5,5 +5,11 @@ export function isValidBox(box) {
 }
 
 export function hasUsableVideo(video) {
-  return Boolean(video && video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0)
+  if (!video) return false
+  return Number.isFinite(video.readyState)
+    && video.readyState >= 2
+    && Number.isFinite(video.videoWidth)
+    && video.videoWidth > 0
+    && Number.isFinite(video.videoHeight)
+    && video.videoHeight > 0
 }
