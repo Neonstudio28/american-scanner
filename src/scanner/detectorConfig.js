@@ -6,5 +6,7 @@ export function getDetectorOptions() {
 }
 
 export function isUsableDetector(result) {
-  return Boolean(result?.box && Number.isFinite(result.box.x) && Number.isFinite(result.box.y))
+  const box = result?.box
+  if (!box) return false
+  return [box.x, box.y, box.width, box.height].every(Number.isFinite) && box.width > 0 && box.height > 0
 }
