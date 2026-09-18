@@ -12,3 +12,11 @@ test('scan resets only after the miss threshold is exceeded', () => {
   assert.equal(shouldResetScan(15, 15), false)
   assert.equal(shouldResetScan(16, 15), true)
 })
+
+test('invalid thresholds cannot trigger scanner transitions', () => {
+  assert.equal(shouldStartScan(0, 0), false)
+  assert.equal(shouldStartScan(Number.NaN, 5), false)
+  assert.equal(shouldStartScan(5, -1), false)
+  assert.equal(shouldResetScan(Number.POSITIVE_INFINITY, 15), false)
+  assert.equal(shouldResetScan(16, -1), false)
+})
