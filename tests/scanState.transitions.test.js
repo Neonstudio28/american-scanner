@@ -12,3 +12,10 @@ test('scanner allows the normal idle-to-complete lifecycle', () => {
 test('scanner rejects skipping directly from idle to complete', () => {
   assert.throws(() => transition(SCAN_PHASES.IDLE, SCAN_PHASES.COMPLETE), /Invalid scanner transition/)
 })
+
+test('scanner rejects unknown source and target phases', () => {
+  assert.equal(canTransition('unknown', 'unknown'), false)
+  assert.equal(canTransition(SCAN_PHASES.IDLE, 'unknown'), false)
+  assert.equal(canTransition('unknown', SCAN_PHASES.IDLE), false)
+  assert.throws(() => transition('unknown', 'unknown'), /Invalid scanner transition/)
+})
