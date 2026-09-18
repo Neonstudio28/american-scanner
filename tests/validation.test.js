@@ -15,3 +15,9 @@ test('usable video requires metadata and positive dimensions', () => {
   assert.equal(hasUsableVideo({ readyState: 2, videoWidth: 0, videoHeight: 480 }), false)
   assert.equal(hasUsableVideo(null), false)
 })
+
+test('non-finite video metadata is never considered usable', () => {
+  assert.equal(hasUsableVideo({ readyState: Number.NaN, videoWidth: 640, videoHeight: 480 }), false)
+  assert.equal(hasUsableVideo({ readyState: 2, videoWidth: Number.POSITIVE_INFINITY, videoHeight: 480 }), false)
+  assert.equal(hasUsableVideo({ readyState: 2, videoWidth: 640, videoHeight: Number.NaN }), false)
+})
