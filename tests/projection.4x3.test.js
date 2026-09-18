@@ -7,5 +7,5 @@ test('4:3 input applies vertical crop compensation', () => {
   assert.ok(projected)
   assert.equal(projected.width, 640)
   assert.equal(projected.height, 480)
-  assert.equal(projected.y, 0)
+  assert.equal(projected.y, 120)
 })
