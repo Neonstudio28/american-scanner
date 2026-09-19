@@ -15,3 +15,14 @@ test('invalid counters cannot poison detection streak state', () => {
   assert.deepEqual(updateDetectionStreaks({ detected: false, hits: 2, misses: -4 }), { hits: 0, misses: 1 })
   assert.deepEqual(updateDetectionStreaks({ detected: true, hits: 1.5, misses: 0 }), { hits: 1, misses: 0 })
 })
+
+test('streak counters saturate at the maximum safe integer', () => {
+  assert.deepEqual(
+    updateDetectionStreaks({ detected: true, hits: Number.MAX_SAFE_INTEGER, misses: 0 }),
+    { hits: Number.MAX_SAFE_INTEGER, misses: 0 },
+  )
+  assert.deepEqual(
+    updateDetectionStreaks({ detected: false, hits: 0, misses: Number.MAX_SAFE_INTEGER }),
+    { hits: 0, misses: Number.MAX_SAFE_INTEGER },
+  )
+})
