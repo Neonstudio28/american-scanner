@@ -21,3 +21,12 @@ test('progress rejects invalid timing inputs', () => {
 test('progress clamps backwards clocks to zero', () => {
   assert.equal(calculateProgress(3000, 1000, 4000), 0)
 })
+
+test('completion only accepts finite progress at or above one hundred', () => {
+  assert.equal(isCompleteProgress(99.999), false)
+  assert.equal(isCompleteProgress(100), true)
+  assert.equal(isCompleteProgress(120), true)
+  assert.equal(isCompleteProgress(Number.NaN), false)
+  assert.equal(isCompleteProgress(Number.POSITIVE_INFINITY), false)
+  assert.equal(isCompleteProgress(-1), false)
+})
