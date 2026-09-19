@@ -1,16 +1,80 @@
-# React + Vite
+# American Scanner
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+American Scanner is a React/Vite browser experience that uses the user's camera and face detection to drive an animated scan sequence. The scanner is designed to degrade gracefully when the face-detection model is unavailable and keeps scanner policy/geometry helpers isolated under `src/scanner` so they can be tested without a browser.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js and npm compatible with the versions required by the checked-in Vite dependencies
+- A modern browser with camera (`getUserMedia`) support
+- Camera permission for the development/production origin
 
-## React Compiler
+Camera access normally requires a secure context (`https://`) outside localhost.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Development
 
-## Expanding the Oxlint configuration
+Install the exact dependency versions from the lockfile:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```sh
+npm ci
+```
+
+Start the Vite development server:
+
+```sh
+npm run dev
+```
+
+Then open the URL printed by Vite and allow camera access when prompted.
+
+## Quality checks
+
+The repository exposes the same checks used by its quality workflow:
+
+```sh
+npm test
+npm run lint
+npm run build
+```
+
+`npm test` runs the scanner's Node test suite. The tests focus on deterministic policy and utility modules rather than requiring camera hardware.
+
+## Scanner architecture
+
+The main React experience lives in `src/App.jsx`. Reusable scanner logic lives in `src/scanner/`, including:
+
+- camera and detector configuration
+- scan state transitions and completion policy
+- detection streak/progress policy
+- face-box normalization and projection
+- score calculation
+- timing and input validation
+- camera error classification and media cleanup
+
+Tests live in `tests/` and use Node's built-in test runner.
+
+## Face detection assets
+
+The app expects face-api.js to be available in the page and loads the Tiny Face Detector model from `/models`. Keep the model assets under `public/models` when deploying the application. If face-api.js or its model cannot be loaded, the current experience falls back instead of blocking startup.
+
+## Camera troubleshooting
+
+If the camera does not start:
+
+1. Confirm the browser has permission to use the camera for the current origin.
+2. Confirm no other application has exclusive access to the camera.
+3. Use `https://` in production; browsers generally restrict camera APIs on insecure origins.
+4. Check the browser console for model-loading or camera errors.
+
+## Production build
+
+Create an optimized bundle with:
+
+```sh
+npm run build
+```
+
+Preview that build locally with:
+
+```sh
+npm run preview
+```
