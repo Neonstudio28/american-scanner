@@ -17,3 +17,10 @@ test('invalid target dimensions return no projection', () => {
   assert.equal(projectMirroredBox(box, 1280, 720, 0, 720), null)
   assert.equal(projectMirroredBox(box, 1280, 720, 1280, Number.POSITIVE_INFINITY), null)
 })
+
+test('invalid box geometry returns no projection', () => {
+  assert.equal(projectMirroredBox(null, 1280, 720), null)
+  assert.equal(projectMirroredBox({ xMin: Number.NaN, yMin: 0, width: 1, height: 1 }, 1280, 720), null)
+  assert.equal(projectMirroredBox({ xMin: 0, yMin: 0, width: -1, height: 1 }, 1280, 720), null)
+  assert.equal(projectMirroredBox({ xMin: 0, yMin: 0, width: 1, height: Number.POSITIVE_INFINITY }, 1280, 720), null)
+})
