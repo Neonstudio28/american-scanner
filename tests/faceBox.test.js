@@ -20,3 +20,8 @@ test('non-finite face geometry is rejected before projection', () => {
   assert.equal(normalizeFaceBox({ xMin: Number.NaN, yMin: 1, width: 1, height: 1 }, 640, 480), null)
   assert.equal(denormalizeFaceBox({ xMin: 0.1, yMin: 0.1, width: Number.POSITIVE_INFINITY, height: 0.2 }, 640, 480), null)
 })
+
+test('negative face dimensions are rejected', () => {
+  assert.equal(normalizeFaceBox({ xMin: 0, yMin: 0, width: -1, height: 20 }, 640, 480), null)
+  assert.equal(denormalizeFaceBox({ xMin: 0, yMin: 0, width: 0.2, height: -0.1 }, 640, 480), null)
+})
