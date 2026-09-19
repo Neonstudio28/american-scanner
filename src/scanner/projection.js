@@ -1,6 +1,13 @@
 export function projectMirroredBox(box, sourceWidth, sourceHeight, targetWidth = 1280, targetHeight = 720) {
   const dimensions = [sourceWidth, sourceHeight, targetWidth, targetHeight]
-  if (!box || !dimensions.every(value => Number.isFinite(value) && value > 0)) return null
+  const boxValues = box && [box.xMin, box.yMin, box.width, box.height]
+  if (
+    !boxValues?.every(Number.isFinite)
+    || box.width < 0
+    || box.height < 0
+    || !dimensions.every(value => Number.isFinite(value) && value > 0)
+  ) return null
+
   const videoAspect = sourceWidth / sourceHeight
   const targetAspect = targetWidth / targetHeight
   let scale
